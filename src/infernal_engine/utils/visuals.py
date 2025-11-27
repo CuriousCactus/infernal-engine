@@ -1,13 +1,13 @@
-import os
-from pathlib import Path
 import glob
+import os
 from enum import Enum
+from pathlib import Path
 
 from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.settings import (
     BASE_BODY_PATH,
-    CHARACTER_VISUALS_PATH,
     BASE_OUTPUT_PATH,
+    CHARACTER_VISUALS_PATH,
 )
 
 

@@ -17,6 +17,7 @@ A tool for converting Baldur's Gate 3 mocap animations into timeline animations.
 
 .\.venv\Scripts\Activate.ps1
 pip install -e .
+pyinstaller .\src\infernal_engine\main.py -F -n InfernalEngine.exe
 cd C:\Users\Shadow\Repos\infernal-engine\dist
 
 ## Credits

@@ -1,12 +1,12 @@
-import shutil
 import os
+import shutil
 from pathlib import Path
 
 from infernal_engine.utils.settings import (
     ANIMATION_METADATA_PATH,
+    BASE_OUTPUT_PATH,
     CINEMATIC_ANIMS_PATH,
     MOCAPS_PATH,
-    BASE_OUTPUT_PATH,
 )
 
 

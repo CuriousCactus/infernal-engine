@@ -1,7 +1,6 @@
 import subprocess
-
-from pathlib import Path
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 DIVINE_PATH = Path("C:/Users/Shadow/ExportTool-v1.20-b3/Packed/Tools/Divine.exe")
 

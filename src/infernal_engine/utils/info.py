@@ -1,4 +1,8 @@
-from infernal_engine.utils.settings import DIALOG_BINARIES_PATHS
+from infernal_engine.utils.dialog import (
+    get_dialog_line,
+    get_speaker_index,
+    get_squashed_dialog_line,
+)
 from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.paths import (
     construct_animation_path,
@@ -6,13 +10,9 @@ from infernal_engine.utils.paths import (
     construct_parsed_dialog_file_path,
     find_file_path,
 )
-from infernal_engine.utils.visuals import get_visuals_info
-from infernal_engine.utils.dialog import (
-    get_dialog_line,
-    get_speaker_index,
-    get_squashed_dialog_line,
-)
+from infernal_engine.utils.settings import DIALOG_BINARIES_PATHS
 from infernal_engine.utils.speakers import get_character_guid
+from infernal_engine.utils.visuals import get_visuals_info
 
 
 def get_animation_info(

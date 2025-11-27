@@ -1,9 +1,19 @@
+import os
 from pathlib import Path
 
-MOD_NAME = "ReturnToTheHouseOfHope_295379f9-b5ee-119f-54c1-9f6bd887046b"
-
-DATA_PATH = Path("C:/Program Files (x86)/Steam/steamapps/common/Baldurs Gate 3/Data")
-UNPACKED_DATA_PATH = Path("C:/Users/Shadow/bg3-modders-multitool/UnpackedData")
+MOD_NAME = os.getenv(
+    "MOD_NAME", "ReturnToTheHouseOfHope_295379f9-b5ee-119f-54c1-9f6bd887046b"
+)
+DATA_PATH = Path(
+    os.getenv(
+        "DATA_PATH", "C:/Program Files (x86)/Steam/steamapps/common/Baldurs Gate 3/Data"
+    )
+)
+UNPACKED_DATA_PATH = Path(
+    os.getenv(
+        "UNPACKED_DATA_PATH", "C:/Users/Shadow/bg3-modders-multitool/UnpackedData"
+    )
+)
 
 DIALOG_BINARIES_PATHS = [
     Path(UNPACKED_DATA_PATH / "Gustav/Mods/GustavDev/Story/DialogsBinary")

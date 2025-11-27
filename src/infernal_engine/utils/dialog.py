@@ -1,10 +1,7 @@
 import os
-from infernal_engine.utils.settings import (
-    TRANSLATIONS_PATH,
-    TRANSLATIONS_OUTPUT_PATH,
-)
-from infernal_engine.utils.parsing import convert_file
-from infernal_engine.utils.parsing import get_tree_from_lsx
+
+from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
+from infernal_engine.utils.settings import TRANSLATIONS_OUTPUT_PATH, TRANSLATIONS_PATH
 
 
 def get_dialog_line(handle):

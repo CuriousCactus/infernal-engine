@@ -1,14 +1,15 @@
-from pathlib import Path
 import os
 import uuid
-from infernal_engine.utils.paths import construtct_animation_metadata_lsf_path
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
 from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
+from infernal_engine.utils.paths import construtct_animation_metadata_lsf_path
 from infernal_engine.utils.settings import (
-    BASE_OUTPUT_PATH,
     ANIMATION_METADATA_TEMPLATE_PATH,
+    BASE_OUTPUT_PATH,
     DATA_PATH,
 )
-import xml.etree.ElementTree as ET
 
 
 def construct_animation_metadata_tree(
