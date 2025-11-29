@@ -2,7 +2,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from infernal_engine.utils.settings import DIVINE_PATH
+from infernal_engine.utils.settings import get_divine_path
 
 
 def convert_file(source_path: Path, target_path: Path):
@@ -13,7 +13,7 @@ def convert_file(source_path: Path, target_path: Path):
 
     subprocess.run(
         [
-            DIVINE_PATH,
+            str(get_divine_path()),
             f"-a",
             command,
             "-s",

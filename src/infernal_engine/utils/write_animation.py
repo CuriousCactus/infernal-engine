@@ -6,9 +6,9 @@ from pathlib import Path
 from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
 from infernal_engine.utils.paths import construtct_animation_metadata_lsf_path
 from infernal_engine.utils.settings import (
-    ANIMATION_METADATA_TEMPLATE_PATH,
-    BASE_OUTPUT_PATH,
-    DATA_PATH,
+    get_animation_metadata_template_path,
+    get_data_path,
+    get_resource_path,
 )
 
 
@@ -17,7 +17,7 @@ def construct_animation_metadata_tree(
     animation_guid,
 ) -> ET.ElementTree:
     animation_metadata_template_tree = get_tree_from_lsx(
-        ANIMATION_METADATA_TEMPLATE_PATH
+        get_animation_metadata_template_path()
     )
 
     attributes = (
@@ -29,7 +29,7 @@ def construct_animation_metadata_tree(
     )
 
     animation_relative_path = (
-        dialog_node_info["animation_path"].relative_to(DATA_PATH).as_posix()
+        dialog_node_info["animation_path"].relative_to(get_data_path()).as_posix()
     )
 
     for attribute in attributes:
@@ -61,10 +61,10 @@ def write_animation(dialog_node_info):
     )
 
     # Save the modified tree to a temporary lsx file
-    os.makedirs(BASE_OUTPUT_PATH / "temp", exist_ok=True)
+    os.makedirs(get_resource_path() / "temp", exist_ok=True)
 
     animation_metadata_lsx_path = (
-        BASE_OUTPUT_PATH / "temp" / Path(animation_guid + ".lsx")
+        get_resource_path() / "temp" / Path(animation_guid + ".lsx")
     )
 
     animation_metadata_template_tree.write(str(animation_metadata_lsx_path))

@@ -1,62 +1,78 @@
 import os
+import sys
 from pathlib import Path
 
-MOD_NAME = os.getenv(
-    "MOD_NAME", "ReturnToTheHouseOfHope_295379f9-b5ee-119f-54c1-9f6bd887046b"
-)
 
-DATA_PATH = Path(
-    os.getenv(
-        "DATA_PATH", "C:/Program Files (x86)/Steam/steamapps/common/Baldurs Gate 3/Data"
+def get_divine_path() -> Path:
+    return Path(os.getenv("DIVINE_PATH", ""))
+
+
+def get_mod_name() -> str:
+    return os.getenv("MOD_NAME", "")
+
+
+def get_unpacked_data_path() -> Path:
+    return Path(os.getenv("UNPACKED_DATA_PATH", ""))
+
+
+def get_data_path() -> Path:
+    return Path(os.getenv("DATA_PATH", ""))
+
+
+def get_dialog_binaries_paths() -> list[Path]:
+    return [
+        Path(get_unpacked_data_path() / "Gustav/Mods/GustavDev/Story/DialogsBinary")
+    ]
+
+
+def get_translations_path() -> Path:
+    return Path(get_unpacked_data_path() / "English/Localization/English/english.loca")
+
+
+def get_mocaps_path() -> Path:
+    return Path(
+        get_unpacked_data_path()
+        / "English_Animations/Mods/Gustav/Localization/English/Animation"
     )
-)
 
-UNPACKED_DATA_PATH = Path(
-    os.getenv(
-        "UNPACKED_DATA_PATH", "C:/Users/Shadow/bg3-modders-multitool/UnpackedData"
+
+def get_character_visuals_path() -> Path:
+    return Path(
+        get_unpacked_data_path()
+        / "Gustav/Public/GustavDev/Content/[PAK]_CharacterVisuals/_merged.lsf"
     )
-)
 
-DIVINE_PATH = Path(
-    os.getenv(
-        "DIVINE_PATH", "C:/Users/Shadow/ExportTool-v1.20-b3/Packed/Tools/Divine.exe"
+
+def get_base_body_path() -> Path:
+    return Path(
+        get_unpacked_data_path() / "Shared/Public/Shared/Content/Assets/Characters"
     )
-)
-
-DIALOG_BINARIES_PATHS = [
-    Path(UNPACKED_DATA_PATH / "Gustav/Mods/GustavDev/Story/DialogsBinary")
-]
-
-TRANSLATIONS_PATH = Path(
-    UNPACKED_DATA_PATH / "English/Localization/English/english.loca"
-)
-
-MOCAPS_PATH = Path(
-    UNPACKED_DATA_PATH / "English_Animations/Mods/Gustav/Localization/English/Animation"
-)
-
-CHARACTER_VISUALS_PATH = Path(
-    UNPACKED_DATA_PATH
-    / "Gustav/Public/GustavDev/Content/[PAK]_CharacterVisuals/_merged.lsf"
-)
-
-BASE_BODY_PATH = Path(
-    UNPACKED_DATA_PATH / "Shared/Public/Shared/Content/Assets/Characters"
-)
 
 
-BASE_OUTPUT_PATH = Path(DATA_PATH / "Helpers")
+def get_resource_path(relative_path=""):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-TRANSLATIONS_OUTPUT_PATH = Path(BASE_OUTPUT_PATH / "parsed" / "english.xml")
+    return Path(os.path.join(base_path, relative_path))
 
-ANIMATION_METADATA_TEMPLATE_PATH = Path(
-    BASE_OUTPUT_PATH / "template_files" / "animation_template.lsx"
-)
 
-CINEMATIC_ANIMS_PATH = Path(
-    DATA_PATH / f"Public/{MOD_NAME}/Assets/Characters/_Anims/_Cinematic"
-)
+def get_translations_output_path() -> Path:
+    return Path(get_resource_path() / "parsed" / "english.xml")
 
-ANIMATION_METADATA_PATH = Path(
-    DATA_PATH / f"Public/{MOD_NAME}/Content/Assets/Characters"
-)
+
+def get_animation_metadata_template_path() -> Path:
+    return Path(get_resource_path() / "template_files" / "animation_template.lsx")
+
+
+def get_cinematic_anims_path() -> Path:
+    return Path(
+        get_data_path() / f"Public/{get_mod_name()}/Assets/Characters/_Anims/_Cinematic"
+    )
+
+
+def get_animation_metadata_path() -> Path:
+    return Path(get_data_path() / f"Public/{get_mod_name()}/Content/Assets/Characters")

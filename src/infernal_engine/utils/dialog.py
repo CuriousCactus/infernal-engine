@@ -1,13 +1,17 @@
 import os
 
 from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
-from infernal_engine.utils.settings import TRANSLATIONS_OUTPUT_PATH, TRANSLATIONS_PATH
+from infernal_engine.utils.settings import (
+    get_translations_output_path,
+    get_translations_path,
+)
 
 
 def get_dialog_line(handle):
-    convert_file(TRANSLATIONS_PATH, TRANSLATIONS_OUTPUT_PATH)
-    os.makedirs(os.path.dirname(TRANSLATIONS_OUTPUT_PATH), exist_ok=True)
-    translations_tree = get_tree_from_lsx(TRANSLATIONS_OUTPUT_PATH)
+    print(get_translations_path(), get_translations_output_path())
+    convert_file(get_translations_path(), get_translations_output_path())
+    os.makedirs(os.path.dirname(get_translations_output_path()), exist_ok=True)
+    translations_tree = get_tree_from_lsx(get_translations_output_path())
 
     dialog_lines = translations_tree.findall("content")
 

@@ -10,7 +10,7 @@ from infernal_engine.utils.paths import (
     construct_parsed_dialog_file_path,
     find_file_path,
 )
-from infernal_engine.utils.settings import DIALOG_BINARIES_PATHS
+from infernal_engine.utils.settings import get_dialog_binaries_paths
 from infernal_engine.utils.speakers import get_character_guid
 from infernal_engine.utils.visuals import get_visuals_info
 
@@ -19,7 +19,9 @@ def get_animation_info(
     handle: str,
     dialog_file: str,
 ) -> dict:
-    dialog_file_path = find_file_path(dialog_file, DIALOG_BINARIES_PATHS)
+    print("dialog_file:", dialog_file)
+    print("DIALOG_BINARIES_PATHS:", get_dialog_binaries_paths())
+    dialog_file_path = find_file_path(dialog_file, get_dialog_binaries_paths())
     parsed_dialog_file_path = construct_parsed_dialog_file_path(dialog_file)
 
     animation_info = {}

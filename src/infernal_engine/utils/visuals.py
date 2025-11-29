@@ -5,9 +5,9 @@ from pathlib import Path
 
 from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.settings import (
-    BASE_BODY_PATH,
-    BASE_OUTPUT_PATH,
-    CHARACTER_VISUALS_PATH,
+    get_base_body_path,
+    get_character_visuals_path,
+    get_resource_path,
 )
 
 
@@ -34,7 +34,8 @@ class BodyType(Enum):
 
 def get_character_base_visual_guid(character_guid: str) -> str:
     character_visuals_tree = get_tree_from_lsf(
-        CHARACTER_VISUALS_PATH, BASE_OUTPUT_PATH / "parsed" / "character_visuals.lsx"
+        get_character_visuals_path(),
+        get_resource_path() / "parsed" / "character_visuals.lsx",
     )
 
     character_base_visual_guid = next(
@@ -170,12 +171,13 @@ def get_visuals_info(
 ) -> dict:
     character_base_visual_guid = get_character_base_visual_guid(character_guid)
     body_paths = glob.glob(
-        BASE_BODY_PATH.as_posix() + "/*/[[]PAK[]]*Body/_merged.lsf", recursive=True
+        get_base_body_path().as_posix() + "/*/[[]PAK[]]*Body/_merged.lsf",
+        recursive=True,
     )
 
     for body_path in body_paths:
         body_tree = get_tree_from_lsf(
-            Path(body_path), BASE_OUTPUT_PATH / "parsed" / "body.lsx"
+            Path(body_path), get_resource_path() / "parsed" / "body.lsx"
         )
 
         base_visual = get_base_visual(body_tree, character_base_visual_guid)

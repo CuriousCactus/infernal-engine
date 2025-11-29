@@ -3,10 +3,10 @@ import shutil
 from pathlib import Path
 
 from infernal_engine.utils.settings import (
-    ANIMATION_METADATA_PATH,
-    BASE_OUTPUT_PATH,
-    CINEMATIC_ANIMS_PATH,
-    MOCAPS_PATH,
+    get_animation_metadata_path,
+    get_cinematic_anims_path,
+    get_mocaps_path,
+    get_resource_path,
 )
 
 
@@ -20,7 +20,7 @@ def find_file_path(file_name, paths) -> Path:
 
 def construct_parsed_dialog_file_path(dialog_file: str) -> Path:
     parsed_dialog_file_path = (
-        BASE_OUTPUT_PATH / "parsed" / "dialogs" / f"{dialog_file}.lsx"
+        get_resource_path() / "parsed" / "dialogs" / f"{dialog_file}.lsx"
     )
 
     return parsed_dialog_file_path
@@ -28,7 +28,11 @@ def construct_parsed_dialog_file_path(dialog_file: str) -> Path:
 
 def construct_mocap_path(character_guid: str, handle: str) -> Path:
     return Path(
-        MOCAPS_PATH / "MC_v" f"{character_guid.replace('-', '')}" "_" f"{handle}" ".GR2"
+        get_mocaps_path() / "MC_v"
+        f"{character_guid.replace('-', '')}"
+        "_"
+        f"{handle}"
+        ".GR2"
     )
 
 
@@ -39,7 +43,7 @@ def construct_animation_path(
     filename = f"{visuals_info['rig']}_SCENE_{visuals_info['scene']}_{visuals_info['action']}.GR2"
 
     return Path(
-        CINEMATIC_ANIMS_PATH
+        get_cinematic_anims_path()
         / visuals_info["act"]
         / visuals_info["area"]
         / visuals_info["scene"]
@@ -53,7 +57,7 @@ def construtct_animation_metadata_lsf_path(
     animation_guid: str,
 ) -> Path:
     animation_metadata_lsf_path = Path(
-        ANIMATION_METADATA_PATH
+        get_animation_metadata_path()
         / dialog_node_info["race_long"]
         / f"[PAK]_{dialog_node_info['body_type_long']}_Cine"
         / f"{animation_guid}.lsf"
