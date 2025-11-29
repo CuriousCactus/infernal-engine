@@ -2,7 +2,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-DIVINE_PATH = Path("C:/Users/Shadow/ExportTool-v1.20-b3/Packed/Tools/Divine.exe")
+from infernal_engine.utils.settings import DIVINE_PATH
 
 
 def convert_file(source_path: Path, target_path: Path):

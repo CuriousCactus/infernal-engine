@@ -7,6 +7,7 @@ from infernal_engine.utils.convert_mocap import convert_mocap
 MOD_NAME = "ReturnToTheHouseOfHope_295379f9-b5ee-119f-54c1-9f6bd887046b"
 DATA_PATH = "C:/Program Files (x86)/Steam/steamapps/common/Baldurs Gate 3/Data"
 UNPACKED_DATA_PATH = "C:/Users/Shadow/bg3-modders-multitool/UnpackedData"
+DIVINE_PATH = "C:/Users/Shadow/ExportTool-v1.20-b3/Packed/Tools/Divine.exe"
 HANDLE = "h68aa9134g0c15g423cga4d8gd2a8f5d5a1c1"  # Gal and her goldmine
 # HANDLE = "had879ee5ga68fg4aa0g8f5fg0687c2df1aa4"  # Heads will roll
 DIALOG_FILE = "WYR_SharessCaress_Taproom_Threeway_NymphDrunkFist"
@@ -17,16 +18,19 @@ def on_submit(
     mod_name_entry: tk.Entry,
     game_data_path_entry: tk.Entry,
     unpacked_data_path_entry: tk.Entry,
+    divine_path_entry: tk.Entry,
     handle_entry: tk.Entry,
     dialog_entry: tk.Entry,
 ):
     mod_name_value = mod_name_entry.get()
     game_data_path_value = game_data_path_entry.get()
     unpacked_data_path_value = unpacked_data_path_entry.get()
+    divine_path_value = divine_path_entry.get()
 
     os.environ["MOD_NAME"] = mod_name_value
     os.environ["DATA_PATH"] = game_data_path_value
     os.environ["UNPACKED_DATA_PATH"] = unpacked_data_path_value
+    os.environ["DIVINE_PATH"] = divine_path_value
 
     handle_value = handle_entry.get()
     dialog_value = dialog_entry.get()
@@ -56,15 +60,20 @@ def main():
     unpacked_data_path_entry.insert(0, UNPACKED_DATA_PATH)
     unpacked_data_path_entry.grid(column=0, row=5, columnspan=2, pady=5)
 
-    ttk.Label(frm, text="Handle:").grid(column=0, row=6, sticky="w")
+    ttk.Label(frm, text="Divine Path:").grid(column=0, row=6, sticky="w")
+    divine_path_entry = ttk.Entry(frm, width=100)
+    divine_path_entry.insert(0, DIVINE_PATH)
+    divine_path_entry.grid(column=0, row=7, columnspan=2, pady=5)
+
+    ttk.Label(frm, text="Handle:").grid(column=0, row=8, sticky="w")
     handle_entry = ttk.Entry(frm, width=100)
     handle_entry.insert(0, HANDLE)
-    handle_entry.grid(column=0, row=7, columnspan=2, pady=5)
+    handle_entry.grid(column=0, row=9, columnspan=2, pady=5)
 
-    ttk.Label(frm, text="Dialog File:").grid(column=0, row=8, sticky="w")
+    ttk.Label(frm, text="Dialog File:").grid(column=0, row=10, sticky="w")
     dialog_entry = ttk.Entry(frm, width=100)
     dialog_entry.insert(0, DIALOG_FILE)
-    dialog_entry.grid(column=0, row=9, columnspan=2, pady=5)
+    dialog_entry.grid(column=0, row=11, columnspan=2, pady=5)
 
     convert_btn = ttk.Button(
         frm,
@@ -77,10 +86,10 @@ def main():
             dialog_entry,
         ),
     )
-    convert_btn.grid(column=0, row=10, sticky="w")
+    convert_btn.grid(column=0, row=12, sticky="w")
 
     quit_btn = ttk.Button(frm, text="Quit", command=root.destroy)
-    quit_btn.grid(column=1, row=10, sticky="e")
+    quit_btn.grid(column=1, row=12, sticky="e")
 
     root.mainloop()
 
