@@ -75,5 +75,4 @@ def write_animation(dialog_node_info):
         animation_guid,
     )
 
-    os.makedirs(animation_metadata_lsf_path.parent, exist_ok=True)
     convert_file(animation_metadata_lsx_path, animation_metadata_lsf_path)

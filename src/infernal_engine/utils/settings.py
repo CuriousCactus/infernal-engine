@@ -4,19 +4,39 @@ from pathlib import Path
 
 
 def get_divine_path() -> Path:
-    return Path(os.getenv("DIVINE_PATH", ""))
+    divine_path = os.getenv("DIVINE_PATH")
+
+    if divine_path is None:
+        raise EnvironmentError("DIVINE_PATH environment variable is not set.")
+
+    return Path(divine_path)
 
 
 def get_mod_name() -> str:
-    return os.getenv("MOD_NAME", "")
+    mod_name = os.getenv("MOD_NAME")
+
+    if mod_name is None:
+        raise EnvironmentError("MOD_NAME environment variable is not set.")
+
+    return mod_name
 
 
 def get_unpacked_data_path() -> Path:
-    return Path(os.getenv("UNPACKED_DATA_PATH", ""))
+    unpacked_data_path = os.getenv("UNPACKED_DATA_PATH")
+
+    if unpacked_data_path is None:
+        raise EnvironmentError("UNPACKED_DATA_PATH environment variable is not set.")
+
+    return Path(unpacked_data_path)
 
 
 def get_data_path() -> Path:
-    return Path(os.getenv("DATA_PATH", ""))
+    data_path = os.getenv("DATA_PATH")
+
+    if data_path is None:
+        raise EnvironmentError("DATA_PATH environment variable is not set.")
+
+    return Path(data_path)
 
 
 def get_dialog_binaries_paths() -> list[Path]:

@@ -84,13 +84,6 @@ def on_submit(
     os.environ["UNPACKED_DATA_PATH"] = unpacked_data_path_entry.get()
     os.environ["DIVINE_PATH"] = divine_path_entry.get()
 
-    DIVINE_PATH = Path(os.getenv("DIVINE_PATH", ""))
-    MOD_NAME = os.getenv("MOD_NAME")
-    UNPACKED_DATA_PATH = Path(os.getenv("UNPACKED_DATA_PATH", ""))
-    DATA_PATH = Path(os.getenv("DATA_PATH", ""))
-
-    print(DIVINE_PATH, MOD_NAME, UNPACKED_DATA_PATH, DATA_PATH)
-
     convert_mocap(handle_entry.get(), dialog_entry.get())
 
 

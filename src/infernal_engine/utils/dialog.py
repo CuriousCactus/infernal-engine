@@ -7,10 +7,21 @@ from infernal_engine.utils.settings import (
 )
 
 
+def get_nodes_list(dialog_tree):
+    nodes = dialog_tree.find("region").find("node").find("children").findall("node")
+
+    # Get the nodes
+    node_list = (
+        next(node for node in nodes if node.get("id") == "nodes")
+        .find("children")
+        .findall("node")
+    )
+
+    return node_list
+
+
 def get_dialog_line(handle):
-    print(get_translations_path(), get_translations_output_path())
     convert_file(get_translations_path(), get_translations_output_path())
-    os.makedirs(os.path.dirname(get_translations_output_path()), exist_ok=True)
     translations_tree = get_tree_from_lsx(get_translations_output_path())
 
     dialog_lines = translations_tree.findall("content")
@@ -24,45 +35,46 @@ def get_dialog_line(handle):
     return dialog_line
 
 
+def get_handle(node):
+    children = node.find("children")
+    if children is not None:
+        property_nodes = children.findall("node")
+        for property_node in property_nodes:
+            property_node_children = property_node.find("children")
+            if property_node_children is not None:
+                for property in property_node_children.findall("node"):
+                    if property.get("id") == "TaggedText":
+                        attributes = (
+                            property.find("children")
+                            .find("node")
+                            .find("children")
+                            .find("node")
+                            .findall("attribute")
+                        )
+
+                        handle = next(
+                            (
+                                attribute.get("handle")
+                                for attribute in attributes
+                                if attribute.get("id") == "TagText"
+                            ),
+                            None,
+                        )
+
+                        return handle
+
+
 def node_matches_handle(node, handle: str) -> bool:
-    property_nodes = node.find("children").findall("node")
-    for property_node in property_nodes:
-        property_node_children = property_node.find("children")
-        if property_node_children is not None:
-            for property in property_node_children.findall("node"):
-                if property.get("id") == "TaggedText":
-                    attributes = (
-                        property.find("children")
-                        .find("node")
-                        .find("children")
-                        .find("node")
-                        .findall("attribute")
-                    )
+    current_handle = get_handle(node)
 
-                    attribute = next(
-                        (
-                            attribute
-                            for attribute in attributes
-                            if attribute.get("id") == "TagText"
-                            and attribute.get("handle") == handle
-                        ),
-                        None,
-                    )
-
-                    if attribute is not None:
-                        return True
-    return False
+    if current_handle == handle:
+        return True
+    else:
+        return False
 
 
 def get_speaker_index(dialog_tree, handle: str) -> str:
-    nodes = dialog_tree.find("region").find("node").find("children").findall("node")
-
-    # Get the nodes
-    node_list = (
-        next(node for node in nodes if node.get("id") == "nodes")
-        .find("children")
-        .findall("node")
-    )
+    node_list = get_nodes_list(dialog_tree)
 
     for node in node_list:
         if node_matches_handle(node, handle):
@@ -75,11 +87,19 @@ def get_speaker_index(dialog_tree, handle: str) -> str:
             return speaker_index
 
 
+def get_word_without_characters(word: str) -> str:
+    word = word.replace("<i>", "")
+    word = word.replace("</i>", "")
+    return "".join(character for character in word if character.isalnum())
+
+
 def get_squashed_dialog_line(dialog_line: str) -> str:
     dialog_line_sections = dialog_line.split(" ")
 
     first_five_sections = [
-        "".join(e for e in x if e.isalnum()) for x in dialog_line_sections[:5]
+        get_word_without_characters(dialog_line_section)
+        for dialog_line_section in dialog_line_sections[:5]
+        if get_word_without_characters(dialog_line_section)
     ]
 
     dialog_line_squashed = "_".join(first_five_sections)
