@@ -181,11 +181,16 @@ def get_skeleton_guid(
 
 def get_character_info(
     character_guid: str,
-) -> dict:
+) -> dict | None:
+    character_info = {}
+    character_info["character_guid"] = character_guid
+
     character_base_visual_guid = get_character_base_visual_guid(character_guid)
 
     if character_base_visual_guid is None:
-        return {}
+        return character_info
+
+    character_info["character_base_visual_guid"] = character_base_visual_guid
 
     body_paths = glob.glob(
         str(get_base_body_path()) + "/*/[[]PAK[]]*Body/_merged.lsf",
@@ -213,7 +218,7 @@ def get_character_info(
             break
 
     if base_visual is None:
-        return {}
+        return character_info
 
     race = base_visual.split("_")[0]
     body_type = base_visual.split("_")[1]
@@ -223,17 +228,14 @@ def get_character_info(
     preview_visual_guid = get_preview_visual_guid(body_tree, body)
     skeleton_guid = get_skeleton_guid(body_tree, body)
 
-    character_info = {
-        "character_base_visual_guid": character_base_visual_guid,
-        "race": race,
-        "race_long": race_long,
-        "body_type": body_type,
-        "body_type_long": body_type_long,
-        "body": body,
-        "rig": rig,
-        "base_visual": base_visual,
-        "preview_visual_guid": preview_visual_guid,
-        "skeleton_guid": skeleton_guid,
-    }
+    character_info["base_visual"] = base_visual
+    character_info["race"] = race
+    character_info["race_long"] = race_long
+    character_info["body_type"] = body_type
+    character_info["body_type_long"] = body_type_long
+    character_info["body"] = body
+    character_info["rig"] = rig
+    character_info["preview_visual_guid"] = preview_visual_guid
+    character_info["skeleton_guid"] = skeleton_guid
 
     return character_info

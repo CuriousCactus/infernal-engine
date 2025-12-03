@@ -21,51 +21,44 @@ from infernal_engine.utils.speakers import get_character_guid
 def get_animation_info(
     handle: str,
     dialog_file: str,
-    characters: dict,
+    speakers: dict,
 ) -> dict:
     dialog_file_path = find_file_path(dialog_file, get_dialog_binaries_paths())
     parsed_dialog_file_path = construct_parsed_dialog_file_path(dialog_file)
     dialog_tree = get_tree_from_lsf(dialog_file_path, parsed_dialog_file_path)
 
-    animation_info: dict[str, str | Path] = {}
-    animation_info["handle"] = handle
-
     speaker_index = get_speaker_index(dialog_tree, handle)
 
-    character_guid = characters.get(handle, {}).get(
-        "character_guid"
-    ) or get_character_guid(
-        dialog_tree,
-        speaker_index,
-    )
+    if speaker_index not in speakers:
+        character_guid = get_character_guid(
+            dialog_tree,
+            speaker_index,
+        )
 
-    if character_guid is None:
-        return {}
-
-    dialog_line = get_dialog_line(handle)
-    dialog_line_squashed = get_squashed_dialog_line(dialog_line)
-    mocap_path = construct_mocap_path(character_guid, handle)
-
-    animation_info["speaker_index"] = speaker_index
-    animation_info["character_guid"] = character_guid
-    animation_info["dialog_line"] = dialog_line
-    animation_info["dialog_line_squashed"] = dialog_line_squashed
-    animation_info["mocap_path"] = mocap_path
-
-    if character_guid not in characters:
-        character_info = get_character_info(character_guid)
-
-        if not character_info:
+        if character_guid is None:
             return {}
 
-        characters[character_guid] = character_info
+        character_info = get_character_info(character_guid)
+
+        if character_info is None:
+            return {}
+
+        speakers[speaker_index] = character_info
+    else:
+        character_guid = speakers[speaker_index]["character_guid"]
 
     scene_info = get_scene_info(
+        handle,
+        character_guid,
         dialog_file_path,
-        characters[character_guid],
-        dialog_line_squashed,
+        speakers[speaker_index],
     )
 
-    animation_info = {**animation_info, **scene_info, **characters[character_guid]}
+    animation_info = {
+        "handle": handle,
+        "speaker_index": speaker_index,
+        **speakers[speaker_index],
+        **scene_info,
+    }
 
     return animation_info
