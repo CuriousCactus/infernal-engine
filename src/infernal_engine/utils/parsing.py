@@ -7,6 +7,9 @@ from infernal_engine.utils.settings import get_divine_path
 
 
 def convert_file(source_path: Path, target_path: Path):
+    if not source_path or not source_path.exists():
+        raise FileNotFoundError(f"Source file not found: {source_path}")
+
     if not target_path.exists():
         os.makedirs(target_path.parent, exist_ok=True)
 

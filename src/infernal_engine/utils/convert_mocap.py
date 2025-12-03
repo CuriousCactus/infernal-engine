@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from infernal_engine.utils.handles import get_handles
 from infernal_engine.utils.info import get_animation_info
@@ -12,10 +13,12 @@ def convert_mocap(handle: str | None, dialog_file: str):
     else:
         handles = [handle]
 
+    speakers: dict[str, dict[str, str | Path]] = {}
     for handle in handles:
         animation_info = get_animation_info(
             handle,
             dialog_file,
+            speakers,
         )
 
         if animation_info.get("animation_path"):

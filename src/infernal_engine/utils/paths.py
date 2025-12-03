@@ -37,17 +37,19 @@ def construct_mocap_path(character_guid: str, handle: str) -> Path:
 
 
 def construct_animation_path(
-    visuals_info: dict,
+    scene_info: dict,
+    character: dict,
 ) -> Path:
-
-    filename = f"{visuals_info['rig']}_SCENE_{visuals_info['scene']}_{visuals_info['action']}.GR2"
+    filename = (
+        f"{character['rig']}_SCENE_{scene_info['scene']}_{scene_info['action']}.GR2"
+    )
 
     return Path(
         get_cinematic_anims_path()
-        / visuals_info["act"]
-        / visuals_info["area"]
-        / visuals_info["scene"]
-        / visuals_info["rig"]
+        / scene_info["act"]
+        / scene_info["area"]
+        / scene_info["scene"]
+        / character["rig"]
         / filename
     )
 
