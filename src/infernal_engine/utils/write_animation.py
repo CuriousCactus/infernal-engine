@@ -3,6 +3,7 @@ import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from infernal_engine.utils.hashing import string_to_uuid4
 from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
 from infernal_engine.utils.paths import construtct_animation_metadata_lsf_path
 from infernal_engine.utils.settings import (
@@ -52,11 +53,11 @@ def construct_animation_metadata_tree(
     return animation_metadata_template_tree
 
 
-def write_animation(dialog_node_info):
-    animation_guid = str(uuid.uuid4())
+def write_animation(animation_info):
+    animation_guid = string_to_uuid4(animation_info["handle"])
 
     animation_metadata_template_tree = construct_animation_metadata_tree(
-        dialog_node_info,
+        animation_info,
         animation_guid,
     )
 
@@ -71,7 +72,7 @@ def write_animation(dialog_node_info):
 
     # Convert the lsx file to lsf and save it to the appropriate path
     animation_metadata_lsf_path = construtct_animation_metadata_lsf_path(
-        dialog_node_info,
+        animation_info,
         animation_guid,
     )
 

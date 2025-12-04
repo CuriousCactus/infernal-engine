@@ -18,11 +18,10 @@ def get_act(dialog_file_path_sections: list[str]) -> str:
 
 def get_scene_info(
     handle: str,
-    character_guid: str,
     dialog_file_path: Path,
-    character: dict,
+    speaker: dict,
 ) -> dict:
-    if character.get("base_visual") == None:
+    if speaker.get("base_visual") == None:
         return {}
 
     dialog_file_path_sections = str(dialog_file_path).split(os.sep)
@@ -33,7 +32,7 @@ def get_scene_info(
 
     dialog_line = get_dialog_line(handle)
     dialog_line_squashed = get_squashed_dialog_line(dialog_line)
-    mocap_path = construct_mocap_path(character_guid, handle)
+    mocap_path = construct_mocap_path(speaker, handle)
 
     scene_info: dict[str, str | Path] = {
         "act": act,
@@ -45,6 +44,6 @@ def get_scene_info(
         "mocap_path": mocap_path,
     }
 
-    scene_info["animation_path"] = construct_animation_path(scene_info, character)
+    scene_info["animation_path"] = construct_animation_path(scene_info, speaker)
 
     return scene_info

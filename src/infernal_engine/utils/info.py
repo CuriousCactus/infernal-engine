@@ -49,7 +49,6 @@ def get_animation_info(
 
     scene_info = get_scene_info(
         handle,
-        character_guid,
         dialog_file_path,
         speakers[speaker_index],
     )

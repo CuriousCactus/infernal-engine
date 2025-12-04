@@ -26,10 +26,10 @@ def construct_parsed_dialog_file_path(dialog_file: str) -> Path:
     return parsed_dialog_file_path
 
 
-def construct_mocap_path(character_guid: str, handle: str) -> Path:
+def construct_mocap_path(speaker, handle) -> Path:
     return Path(
         get_mocaps_path() / "MC_v"
-        f"{character_guid.replace('-', '')}"
+        f"{speaker["character_guid"].replace('-', '')}"
         "_"
         f"{handle}"
         ".GR2"
