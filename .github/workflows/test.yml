@@ -9,10 +9,6 @@ on:
   pull_request:
     branches: [ "main", "master" ]
   workflow_call:
-    secrets:
-      env:
-        description: 'Test'
-        required: true
 
 permissions:
   contents: read
