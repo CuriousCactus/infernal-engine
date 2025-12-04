@@ -1,0 +1,36 @@
+# This workflow will install Python dependencies, lint and run tests, then build the app.
+# For more information see: https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
+
+name: Test Python application
+
+on:
+  push:
+    tags:        
+      - '**'
+
+permissions:
+  contents: read
+
+jobs:
+  call-workflow:
+    uses:  ./.github/workflows/test.yml
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.13
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_dev.txt
+    - name: Install build requirements
+      run: pip install -r requirements.txt pyinstaller
+    - name: Build
+      run: pyinstaller ./src/infernal_engine/main.py -F -n InfernalEngine.exe --add-data=template_files:template_files
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
