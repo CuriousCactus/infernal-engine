@@ -4,23 +4,7 @@
 name: Build and Release
 
 on:
-  push:
-    branches:
-      - main
-      - master
-    tags:        
-      - 'v*'
   workflow_dispatch:
-    inputs:
-      version_bump:
-        description: 'Version bump type (major, minor, patch)'
-        required: true
-        default: 'patch'
-        type: choice
-        options:
-          - major
-          - minor
-          - patch
 
 permissions:
   contents: write
