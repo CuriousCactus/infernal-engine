@@ -39,7 +39,7 @@ def get_character_base_visual_guid(character_guid: str) -> str | None:
     )
 
     resources = (
-        character_visuals_tree.find("region")
+        character_visuals_tree.find("region")  # type: ignore
         .find("node")
         .find("children")
         .findall("node")
@@ -57,7 +57,7 @@ def get_character_base_visual_guid(character_guid: str) -> str | None:
                 [
                     x
                     for x in (node.findall("attribute"))
-                    if character_guid in x.get("value")
+                    if character_guid == x.get("value")
                 ]
             )
             > 0

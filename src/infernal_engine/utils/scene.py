@@ -1,8 +1,14 @@
 import os
 from pathlib import Path
 
-from infernal_engine.utils.dialog import get_dialog_line, get_squashed_dialog_line
-from infernal_engine.utils.paths import construct_animation_path, construct_mocap_path
+from infernal_engine.utils.dialog import (
+    get_dialog_line,
+    get_squashed_dialog_line,
+)
+from infernal_engine.utils.paths import (
+    construct_animation_path,
+    construct_mocap_path,
+)
 
 
 def get_act(dialog_file_path_sections: list[str]) -> str:

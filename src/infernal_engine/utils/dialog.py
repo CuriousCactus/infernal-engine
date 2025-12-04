@@ -6,7 +6,9 @@ from infernal_engine.utils.settings import (
 
 
 def get_nodes_list(dialog_tree):
-    nodes = dialog_tree.find("region").find("node").find("children").findall("node")
+    nodes = (
+        dialog_tree.find("region").find("node").find("children").findall("node")
+    )
 
     # Get the nodes
     node_list = (
@@ -71,9 +73,10 @@ def node_matches_handle(node, handle: str) -> bool:
         return False
 
 
-def get_speaker_index(dialog_tree, handle: str) -> str:
+def get_speaker_index(dialog_tree, handle: str) -> int:
     node_list = get_nodes_list(dialog_tree)
 
+    speaker_index = None
     for node in node_list:
         if node_matches_handle(node, handle):
             speaker_index = next(
@@ -82,7 +85,10 @@ def get_speaker_index(dialog_tree, handle: str) -> str:
                 if attribute.get("id") == "speaker"
             )
 
-            return speaker_index
+    if speaker_index is None:
+        raise ValueError(f"Could not find speaker index for {handle}")
+
+    return speaker_index
 
 
 def get_word_without_characters(word: str) -> str:

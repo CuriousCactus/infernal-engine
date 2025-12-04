@@ -41,12 +41,17 @@ def get_data_path() -> Path:
 
 def get_dialog_binaries_paths() -> list[Path]:
     return [
-        Path(get_unpacked_data_path() / "Gustav/Mods/GustavDev/Story/DialogsBinary")
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Story/DialogsBinary"
+        )
     ]
 
 
 def get_translations_path() -> Path:
-    return Path(get_unpacked_data_path() / "English/Localization/English/english.loca")
+    return Path(
+        get_unpacked_data_path() / "English/Localization/English/english.loca"
+    )
 
 
 def get_mocaps_path() -> Path:
@@ -65,7 +70,8 @@ def get_character_visuals_path() -> Path:
 
 def get_base_body_path() -> Path:
     return Path(
-        get_unpacked_data_path() / "Shared/Public/Shared/Content/Assets/Characters"
+        get_unpacked_data_path()
+        / "Shared/Public/Shared/Content/Assets/Characters"
     )
 
 
@@ -85,14 +91,19 @@ def get_translations_output_path() -> Path:
 
 
 def get_animation_metadata_template_path() -> Path:
-    return Path(get_resource_path() / "template_files" / "animation_template.lsx")
+    return Path(
+        get_resource_path() / "template_files" / "animation_template.lsx"
+    )
 
 
 def get_cinematic_anims_path() -> Path:
     return Path(
-        get_data_path() / f"Public/{get_mod_name()}/Assets/Characters/_Anims/_Cinematic"
+        get_data_path()
+        / f"Public/{get_mod_name()}/Assets/Characters/_Anims/_Cinematic"
     )
 
 
 def get_animation_metadata_path() -> Path:
-    return Path(get_data_path() / f"Public/{get_mod_name()}/Content/Assets/Characters")
+    return Path(
+        get_data_path() / f"Public/{get_mod_name()}/Content/Assets/Characters"
+    )

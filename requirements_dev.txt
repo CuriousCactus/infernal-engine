@@ -1,2 +1,7 @@
+librt==0.6.3
+mypy==1.19.0
+mypy_extensions==1.1.0
+pathspec==0.12.1
 ruff==0.14.7
 setuptools==80.9.0
+typing_extensions==4.15.0
