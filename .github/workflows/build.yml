@@ -1,36 +1,108 @@
-# This workflow will install Python dependencies, lint and run tests, then build the app.
+# This workflow will install Python dependencies, lint and run tests, then build the app and create a release.
 # For more information see: https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
 
-name: Test Python application
+name: Build and Release
 
 on:
   push:
+    branches:
+      - main
+      - master
     tags:        
-      - '**'
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type (major, minor, patch)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   call-workflow:
     uses:  ./.github/workflows/test.yml
+
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get next version
+        id: version
+        run: |
+          # Get the latest tag
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          LATEST_VERSION=${LATEST_TAG#v}
+          
+          # Parse version
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_VERSION"
+          MAJOR=${MAJOR:-0}
+          MINOR=${MINOR:-0}
+          PATCH=${PATCH:-0}
+          
+          # Determine bump type from input or default to patch
+          BUMP_TYPE="${{ github.event.inputs.version_bump }}"
+          BUMP_TYPE=${BUMP_TYPE:-patch}
+          
+          # Bump version
+          if [ "$BUMP_TYPE" = "major" ]; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [ "$BUMP_TYPE" = "minor" ]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            PATCH=$((PATCH + 1))
+          fi
+          
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Version: v$NEW_VERSION"
+
   build:
+    needs: get-version
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.13
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements_dev.txt
-    - name: Install build requirements
-      run: pip install -r requirements.txt pyinstaller
-    - name: Build
-      run: pyinstaller ./src/infernal_engine/main.py -F -n InfernalEngine.exe --add-data=template_files:template_files
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        path: dist/*
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_dev.txt
+      - name: Install build requirements
+        run: pip install -r requirements.txt pyinstaller
+      - name: Build
+        run: pyinstaller ./src/infernal_engine/main.py -F -n InfernalEngine.exe --add-data=template_files:template_files
+      - name: Create tag and release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.get-version.outputs.version }}
+          release_name: Release ${{ needs.get-version.outputs.version }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/InfernalEngine.exe
+          asset_name: InfernalEngine.exe
+          asset_content_type: application/octet-stream
