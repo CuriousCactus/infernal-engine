@@ -68,6 +68,8 @@ def on_submit(
     divine_path_entry: tk.Entry,
     handle_entry: tk.Entry,
     dialog_entry: tk.Entry,
+    prog_var,
+    root,
 ):
     # Save settings
     save_settings(
@@ -84,7 +86,7 @@ def on_submit(
     os.environ["UNPACKED_DATA_PATH"] = unpacked_data_path_entry.get()
     os.environ["DIVINE_PATH"] = divine_path_entry.get()
 
-    convert_mocap(handle_entry.get(), dialog_entry.get())
+    convert_mocap(handle_entry.get(), dialog_entry.get(), prog_var, root)
 
 
 def on_quit(
@@ -147,6 +149,10 @@ def main():
     dialog_entry.insert(0, settings["dialog_file"])
     dialog_entry.grid(column=0, row=11, columnspan=2, pady=5)
 
+    prog_var = tk.DoubleVar()
+    prog_bar = ttk.Progressbar(frm, variable=prog_var)
+    prog_bar.grid(column=0, row=12, columnspan=2, pady=5, sticky="ew")
+
     convert_btn = ttk.Button(
         frm,
         text="Convert",
@@ -157,9 +163,11 @@ def main():
             divine_path_entry,
             handle_entry,
             dialog_entry,
+            prog_var,
+            root,
         ),
     )
-    convert_btn.grid(column=0, row=12, sticky="w")
+    convert_btn.grid(column=0, row=13, sticky="w")
 
     quit_btn = ttk.Button(
         frm,
@@ -174,7 +182,7 @@ def main():
             dialog_entry,
         ),
     )
-    quit_btn.grid(column=1, row=12, sticky="e")
+    quit_btn.grid(column=1, row=13, sticky="e")
 
     root.protocol(
         "WM_DELETE_WINDOW",
