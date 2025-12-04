@@ -55,13 +55,13 @@ def construct_animation_path(
 
 
 def construtct_animation_metadata_lsf_path(
-    dialog_node_info: dict,
+    animation_info: dict,
     animation_guid: str,
 ) -> Path:
     animation_metadata_lsf_path = Path(
         get_animation_metadata_path()
-        / dialog_node_info["race_long"]
-        / f"[PAK]_{dialog_node_info['body_type_long']}_Cine"
+        / animation_info["race_long"]
+        / f"[PAK]_{animation_info['body_type_long']}_Cine"
         / f"{animation_guid}.lsf"
     )
 
@@ -71,9 +71,9 @@ def construtct_animation_metadata_lsf_path(
 # https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/
 
 
-def copy_animation(dialog_node_info):
-    os.makedirs(os.path.dirname(dialog_node_info["animation_path"]), exist_ok=True)
+def copy_animation(animation_info):
+    os.makedirs(os.path.dirname(animation_info["animation_path"]), exist_ok=True)
     shutil.copyfile(
-        dialog_node_info["mocap_path"],
-        dialog_node_info["animation_path"],
+        animation_info["mocap_path"],
+        animation_info["animation_path"],
     )
