@@ -40,5 +40,5 @@ if __name__ == "__main__":
         "C:/Users/Shadow/ExportTool-v1.20-b3/Packed/Tools/Divine.exe"
     )
 
-    # convert_mocap(None, "WYR_SharessCaress_Taproom_Threeway_NymphDrunkFist")
-    convert_mocap(None, "LOW_HouseOfHope_Hope")
+    convert_mocap(None, "WYR_SharessCaress_Taproom_Threeway_NymphDrunkFist")
+    # convert_mocap(None, "LOW_HouseOfHope_Hope")

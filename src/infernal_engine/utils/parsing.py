@@ -33,20 +33,13 @@ def convert_file(source_path: Path, target_path: Path):
         )
 
 
-def get_tree_from_lsx(
-    path: Path,
-) -> ET.ElementTree[ET.Element[str]]:
-    # Parse the lsx file
-    parser = ET.XMLParser(target=ET.TreeBuilder(insert_comments=True))
-    tree = ET.parse(path, parser)
+def get_tree_from_lsx(path: Path):
+    tree = ET.parse(path)
 
     return tree
 
 
-def get_tree_from_lsf(
-    source_path: Path,
-    target_path: Path,
-) -> ET.ElementTree[ET.Element[str]]:
+def get_tree_from_lsf(source_path: Path, target_path: Path):
     # Convert the lsf file to lsx
     convert_file(source_path, target_path)
 

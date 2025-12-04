@@ -1,5 +1,4 @@
 import os
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from infernal_engine.utils.hashing import string_to_uuid4
@@ -15,7 +14,7 @@ from infernal_engine.utils.settings import (
 def construct_animation_metadata_tree(
     animation_info,
     animation_guid,
-) -> ET.ElementTree[ET.Element[str]]:
+):
     animation_metadata_template_tree = get_tree_from_lsx(
         get_animation_metadata_template_path()
     )
