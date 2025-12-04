@@ -1,15 +1,7 @@
-import xml.etree.ElementTree as ET
-from pathlib import Path
-
 from infernal_engine.utils.characters import get_character_info
-from infernal_engine.utils.dialog import (
-    get_dialog_line,
-    get_speaker_index,
-    get_squashed_dialog_line,
-)
+from infernal_engine.utils.dialog import get_speaker_index
 from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.paths import (
-    construct_mocap_path,
     construct_parsed_dialog_file_path,
     find_file_path,
 )

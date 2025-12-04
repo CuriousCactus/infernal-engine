@@ -22,7 +22,7 @@ SETTINGS_FILE = SETTINGS_DIR / "settings.json"
 def load_settings():
     """Load settings from file, return defaults if file doesn't exist."""
     if SETTINGS_FILE.exists():
-        with open(SETTINGS_FILE, "r") as f:
+        with open(SETTINGS_FILE) as f:
             return json.load(f)
 
     return {

@@ -12,7 +12,7 @@ from infernal_engine.utils.settings import (
 
 def find_file_path(file_name, paths) -> Path:
     for dialog_binaries_path in paths:
-        for root, dirs, files in os.walk(dialog_binaries_path):
+        for root, _, files in os.walk(dialog_binaries_path):
             for name in files:
                 if name.replace(".lsf", "") == file_name:
                     return Path(os.path.abspath(os.path.join(root, name)))
@@ -29,7 +29,7 @@ def construct_parsed_dialog_file_path(dialog_file: str) -> Path:
 def construct_mocap_path(speaker, handle) -> Path:
     return Path(
         get_mocaps_path() / "MC_v"
-        f"{speaker["character_guid"].replace('-', '')}"
+        f"{speaker['character_guid'].replace('-', '')}"
         "_"
         f"{handle}"
         ".GR2"

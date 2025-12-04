@@ -21,7 +21,7 @@ def get_scene_info(
     dialog_file_path: Path,
     speaker: dict,
 ) -> dict:
-    if speaker.get("base_visual") == None:
+    if speaker.get("base_visual") is None:
         return {}
 
     dialog_file_path_sections = str(dialog_file_path).split(os.sep)

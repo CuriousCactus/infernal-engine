@@ -7,7 +7,7 @@ def get_divine_path() -> Path:
     divine_path = os.getenv("DIVINE_PATH")
 
     if divine_path is None:
-        raise EnvironmentError("DIVINE_PATH environment variable is not set.")
+        raise OSError("DIVINE_PATH environment variable is not set.")
 
     return Path(divine_path)
 
@@ -16,7 +16,7 @@ def get_mod_name() -> str:
     mod_name = os.getenv("MOD_NAME")
 
     if mod_name is None:
-        raise EnvironmentError("MOD_NAME environment variable is not set.")
+        raise OSError("MOD_NAME environment variable is not set.")
 
     return mod_name
 
@@ -25,7 +25,7 @@ def get_unpacked_data_path() -> Path:
     unpacked_data_path = os.getenv("UNPACKED_DATA_PATH")
 
     if unpacked_data_path is None:
-        raise EnvironmentError("UNPACKED_DATA_PATH environment variable is not set.")
+        raise OSError("UNPACKED_DATA_PATH environment variable is not set.")
 
     return Path(unpacked_data_path)
 
@@ -34,7 +34,7 @@ def get_data_path() -> Path:
     data_path = os.getenv("DATA_PATH")
 
     if data_path is None:
-        raise EnvironmentError("DATA_PATH environment variable is not set.")
+        raise OSError("DATA_PATH environment variable is not set.")
 
     return Path(data_path)
 

@@ -1,5 +1,3 @@
-import os
-
 from infernal_engine.utils.parsing import convert_file, get_tree_from_lsx
 from infernal_engine.utils.settings import (
     get_translations_output_path,

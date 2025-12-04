@@ -21,7 +21,7 @@ def convert_file(source_path: Path, target_path: Path):
         subprocess.run(
             [
                 str(get_divine_path()),
-                f"-a",
+                "-a",
                 command,
                 "-s",
                 str(source_path),
