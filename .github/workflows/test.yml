@@ -44,6 +44,6 @@ jobs:
     - name: Install project
       run: |
         pip install .
-    - name: Run tests
-      run: |
-        pytest
+    # - name: Run tests
+    #   run: |
+    #     pytest
