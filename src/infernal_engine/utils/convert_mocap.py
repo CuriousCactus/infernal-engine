@@ -10,8 +10,8 @@ from infernal_engine.utils.write_animation import write_animation
 def convert_mocap(
     handle: str | None,
     dialog_file: str,
-    prog_var,
-    root,
+    prog_var=None,
+    root=None,
 ):
     if not handle:
         handles = get_handles(dialog_file)
@@ -31,8 +31,10 @@ def convert_mocap(
             write_animation(animation_info)
 
         percent_done = (index + 1) * 100 / len(handles)
-        prog_var.set(percent_done)
-        root.update()
+
+        if prog_var:
+            prog_var.set(percent_done)
+            root.update()
 
 
 if __name__ == "__main__":
