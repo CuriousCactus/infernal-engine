@@ -44,7 +44,10 @@ def get_dialog_binaries_paths() -> list[Path]:
         Path(
             get_unpacked_data_path()
             / "Gustav/Mods/GustavDev/Story/DialogsBinary"
-        )
+        ),
+        Path(
+            get_unpacked_data_path() / "Gustav/Mods/Gustav/Story/DialogsBinary"
+        ),
     ]
 
 
@@ -61,11 +64,19 @@ def get_mocaps_path() -> Path:
     )
 
 
-def get_character_visuals_path() -> Path:
-    return Path(
-        get_unpacked_data_path()
-        / "Gustav/Public/GustavDev/Content/[PAK]_CharacterVisuals/_merged.lsf"
-    )
+def get_character_visuals_paths() -> list[Path]:
+    return [
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Public/GustavDev/Content"
+            / "[PAK]_CharacterVisuals/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Public/Gustav/Content"
+            / "[PAK]_CharacterVisuals/_merged.lsf"
+        ),
+    ]
 
 
 def get_base_body_path() -> Path:

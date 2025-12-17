@@ -139,15 +139,15 @@ def main():
     divine_path_entry.insert(0, settings["divine_path"])
     divine_path_entry.grid(column=0, row=7, columnspan=2, pady=5)
 
-    ttk.Label(frm, text="Handle:").grid(column=0, row=8, sticky="w")
-    handle_entry = ttk.Entry(frm, width=100)
-    handle_entry.insert(0, settings["handle"])
-    handle_entry.grid(column=0, row=9, columnspan=2, pady=5)
-
-    ttk.Label(frm, text="Dialog File:").grid(column=0, row=10, sticky="w")
+    ttk.Label(frm, text="Dialog File:").grid(column=0, row=8, sticky="w")
     dialog_entry = ttk.Entry(frm, width=100)
     dialog_entry.insert(0, settings["dialog_file"])
-    dialog_entry.grid(column=0, row=11, columnspan=2, pady=5)
+    dialog_entry.grid(column=0, row=9, columnspan=2, pady=5)
+
+    ttk.Label(frm, text="Handle:").grid(column=0, row=10, sticky="w")
+    handle_entry = ttk.Entry(frm, width=100)
+    handle_entry.insert(0, settings["handle"])
+    handle_entry.grid(column=0, row=11, columnspan=2, pady=5)
 
     prog_var = tk.DoubleVar()
     prog_bar = ttk.Progressbar(frm, variable=prog_var)

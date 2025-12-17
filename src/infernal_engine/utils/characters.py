@@ -6,7 +6,7 @@ from pathlib import Path
 from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.settings import (
     get_base_body_path,
-    get_character_visuals_path,
+    get_character_visuals_paths,
     get_resource_path,
 )
 
@@ -33,39 +33,45 @@ class BodyType(Enum):
 
 
 def get_character_base_visual_guid(character_guid: str) -> str | None:
-    character_visuals_tree = get_tree_from_lsf(
-        get_character_visuals_path(),
-        get_resource_path() / "parsed" / "character_visuals.lsx",
-    )
+    character_visuals_paths = get_character_visuals_paths()
+    for character_visuals_path in character_visuals_paths:
+        mod = os.path.normpath(character_visuals_path).split(os.sep)[-4]
+        character_visuals_tree = get_tree_from_lsf(
+            character_visuals_path,
+            get_resource_path() / "parsed" / f"character_visuals_{mod}.lsx",
+        )
 
-    resources = (
-        character_visuals_tree.find("region")  # type: ignore
-        .find("node")
-        .find("children")
-        .findall("node")
-    )
+        resources = (
+            character_visuals_tree.find("region")  # type: ignore
+            .find("node")
+            .find("children")
+            .findall("node")
+        )
 
-    character_base_visual_guid = next(
-        (
-            next(
-                attribute.get("value")
-                for attribute in node.findall("attribute")
-                if attribute.get("id") == "BaseVisual"
-            )
-            for node in resources
-            if len(
-                [
-                    x
-                    for x in (node.findall("attribute"))
-                    if character_guid in x.get("value")
-                ]
-            )
-            > 0
-        ),
-        None,
-    )
+        character_base_visual_guid = next(
+            (
+                next(
+                    attribute.get("value")
+                    for attribute in node.findall("attribute")
+                    if attribute.get("id") == "BaseVisual"
+                )
+                for node in resources
+                if len(
+                    [
+                        x
+                        for x in (node.findall("attribute"))
+                        if character_guid in x.get("value")
+                    ]
+                )
+                > 0
+            ),
+            None,
+        )
 
-    return character_base_visual_guid
+        if character_base_visual_guid:
+            return character_base_visual_guid
+
+    return None
 
 
 def get_base_visual(
@@ -112,6 +118,7 @@ def get_base_visual(
 def get_preview_visual_guid(
     body_tree,
     body_type: str,
+    character: str | None,
 ) -> str:
     visuals = (
         next(
@@ -122,6 +129,10 @@ def get_preview_visual_guid(
         .find("node")
         .find("children")
         .findall("node")
+    )
+
+    preview_visual_name = (
+        f"{body_type}_NKD_Body{'_' + character if character else ''}_A"
     )
 
     preview_visual_guid = next(
@@ -135,7 +146,7 @@ def get_preview_visual_guid(
             [
                 x
                 for x in (node.findall("attribute"))
-                if f"{body_type}_NKD_Body_A" == x.get("value")
+                if x.get("value") == preview_visual_name
             ]
         )
         > 0
@@ -159,6 +170,8 @@ def get_skeleton_guid(
         .findall("node")
     )
 
+    skeleton_name = f"{body_type}_Base"
+
     skeleton_guid = next(
         next(
             attribute.get("value")
@@ -170,7 +183,7 @@ def get_skeleton_guid(
             [
                 x
                 for x in (node.findall("attribute"))
-                if f"{body_type}_Base" == x.get("value")
+                if x.get("value") == skeleton_name
             ]
         )
         > 0
@@ -220,12 +233,18 @@ def get_character_info(
     if base_visual is None:
         return character_info
 
-    race = base_visual.split("_")[0]
-    body_type = base_visual.split("_")[1]
-    body = base_visual.replace("_Base", "")
+    base_visual_sections = base_visual.split("_")
+    race = base_visual_sections[0]
+    body_type = base_visual_sections[1]
+    body = "_".join(base_visual_sections[0:2])
+    character = (
+        base_visual_sections[2].title()
+        if len(base_visual_sections) > 2 and base_visual_sections[2] != "Base"
+        else None
+    )
     rig = base_visual.replace("_Base", "_Rig")
 
-    preview_visual_guid = get_preview_visual_guid(body_tree, body)
+    preview_visual_guid = get_preview_visual_guid(body_tree, body, character)
     skeleton_guid = get_skeleton_guid(body_tree, body)
 
     character_info["base_visual"] = base_visual
