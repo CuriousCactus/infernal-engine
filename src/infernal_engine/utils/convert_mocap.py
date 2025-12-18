@@ -52,10 +52,7 @@ if __name__ == "__main__":
     )
 
     convert_mocap(None, "WYR_SharessCaress_Taproom_Threeway_NymphDrunkFist")
-    convert_mocap(
-        "h70870ce1gec3bg4e9dgb674g7224ce1a289a",
-        "CAMP_Night3_CRD_Astarion",
-    )
+    convert_mocap(None, "CAMP_Night3_CRD_Astarion")
     convert_mocap(None, "LOW_HouseOfHope_Hope")
     convert_mocap(
         "hfd3d4e05gf322g4231ga27dga265b4fdc449",

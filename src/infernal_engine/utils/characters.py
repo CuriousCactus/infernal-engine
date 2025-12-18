@@ -136,6 +136,8 @@ def get_preview_visual_guid(
         f"{body_type}_NKD_Body{'_' + character if character else ''}"
     )
 
+    preview_visual_names = [preview_visual_name, preview_visual_name + "_A"]
+
     preview_visual_guid = next(
         (
             next(
@@ -148,7 +150,7 @@ def get_preview_visual_guid(
                 [
                     x
                     for x in (node.findall("attribute"))
-                    if preview_visual_name in x.get("value")
+                    if x.get("value") in preview_visual_names
                 ]
             )
             > 0
