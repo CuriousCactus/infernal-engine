@@ -1,6 +1,7 @@
 import glob
 import os
 from enum import Enum
+from logging import warning
 from pathlib import Path
 
 from infernal_engine.utils.parsing import get_tree_from_lsf
@@ -119,7 +120,7 @@ def get_preview_visual_guid(
     body_tree,
     body_type: str,
     character: str | None,
-) -> str:
+) -> str | None:
     visuals = (
         next(
             region
@@ -132,25 +133,31 @@ def get_preview_visual_guid(
     )
 
     preview_visual_name = (
-        f"{body_type}_NKD_Body{'_' + character if character else ''}_A"
+        f"{body_type}_NKD_Body{'_' + character if character else ''}"
     )
 
     preview_visual_guid = next(
-        next(
-            attribute.get("value")
-            for attribute in node.findall("attribute")
-            if attribute.get("id") == "ID"
-        )
-        for node in visuals
-        if len(
-            [
-                x
-                for x in (node.findall("attribute"))
-                if x.get("value") == preview_visual_name
-            ]
-        )
-        > 0
+        (
+            next(
+                attribute.get("value")
+                for attribute in node.findall("attribute")
+                if attribute.get("id") == "ID"
+            )
+            for node in visuals
+            if len(
+                [
+                    x
+                    for x in (node.findall("attribute"))
+                    if preview_visual_name in x.get("value")
+                ]
+            )
+            > 0
+        ),
+        None,
     )
+
+    if preview_visual_guid is None:
+        warning(f"preview_visual_guid not found for {preview_visual_name}")
 
     return preview_visual_guid
 
@@ -158,7 +165,7 @@ def get_preview_visual_guid(
 def get_skeleton_guid(
     body_tree,
     body_type: str,
-) -> str:
+) -> str | None:
     visuals = (
         next(
             region
@@ -173,21 +180,27 @@ def get_skeleton_guid(
     skeleton_name = f"{body_type}_Base"
 
     skeleton_guid = next(
-        next(
-            attribute.get("value")
-            for attribute in node.findall("attribute")
-            if attribute.get("id") == "ID"
-        )
-        for node in visuals
-        if len(
-            [
-                x
-                for x in (node.findall("attribute"))
-                if x.get("value") == skeleton_name
-            ]
-        )
-        > 0
+        (
+            next(
+                attribute.get("value")
+                for attribute in node.findall("attribute")
+                if attribute.get("id") == "ID"
+            )
+            for node in visuals
+            if len(
+                [
+                    x
+                    for x in (node.findall("attribute"))
+                    if skeleton_name in x.get("value")
+                ]
+            )
+            > 0
+        ),
+        None,
     )
+
+    if skeleton_guid is None:
+        warning(f"skeleton_guid not found for {skeleton_name}")
 
     return skeleton_guid
 
@@ -195,7 +208,7 @@ def get_skeleton_guid(
 def get_character_info(
     character_guid: str,
 ) -> dict | None:
-    character_info = {}
+    character_info: dict[str, str | None] = {}
     character_info["character_guid"] = character_guid
 
     character_base_visual_guid = get_character_base_visual_guid(character_guid)
@@ -242,7 +255,7 @@ def get_character_info(
         if len(base_visual_sections) > 2 and base_visual_sections[2] != "Base"
         else None
     )
-    rig = base_visual.replace("_Base", "_Rig")
+    rig = body + "_Rig"
 
     preview_visual_guid = get_preview_visual_guid(body_tree, body, character)
     skeleton_guid = get_skeleton_guid(body_tree, body)
@@ -253,6 +266,7 @@ def get_character_info(
     character_info["body_type"] = body_type
     character_info["body_type_long"] = body_type_long
     character_info["body"] = body
+    character_info["character"] = character
     character_info["rig"] = rig
     character_info["preview_visual_guid"] = preview_visual_guid
     character_info["skeleton_guid"] = skeleton_guid

@@ -86,10 +86,21 @@ def get_base_body_path() -> Path:
     )
 
 
+def get_unpacked_cinematic_anims_paths():
+    return [
+        Path(
+            get_unpacked_data_path()
+            / "Models/Public/Shared/Assets/Characters/_Anims/_Cinematic"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Models/Public/SharedDev/Assets/Characters/_Anims/_Cinematic"
+        ),
+    ]
+
+
 def get_resource_path(relative_path=""):
-    """Get absolute path to resource, works for dev and for PyInstaller"""
     try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")

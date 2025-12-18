@@ -10,9 +10,20 @@ from infernal_engine.utils.settings import (
 )
 
 
+def find_folder_path(file_name, paths) -> Path | None:
+    file_path = None
+    for path in paths:
+        for root, _, files in os.walk(path):
+            for name in files:
+                if file_name in root:
+                    file_path = Path(os.path.abspath(os.path.join(root, name)))
+
+    return file_path
+
+
 def find_file_path(file_name, paths) -> Path:
-    for dialog_binaries_path in paths:
-        for root, _, files in os.walk(dialog_binaries_path):
+    for path in paths:
+        for root, _, files in os.walk(path):
             for name in files:
                 if name.replace(".lsf", "") == file_name:
                     file_path = Path(os.path.abspath(os.path.join(root, name)))
@@ -55,7 +66,6 @@ def construct_animation_path(
         / scene_info["act"]
         / scene_info["area"]
         / scene_info["scene"]
-        / character["rig"]
         / filename
     )
 

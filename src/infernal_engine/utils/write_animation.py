@@ -43,9 +43,9 @@ def construct_animation_metadata_tree(
                 str(animation_relative_path).replace(".GR2", ".Anim.0"),
             )
         elif attribute.get("id") == "PreviewVisualResource":
-            attribute.set("value", animation_info["preview_visual_guid"])
+            attribute.set("value", animation_info["preview_visual_guid"] or "")
         elif attribute.get("id") == "SkeletonResource":
-            attribute.set("value", animation_info["skeleton_guid"])
+            attribute.set("value", animation_info["skeleton_guid"] or "")
 
     return animation_metadata_template_tree
 
@@ -57,14 +57,14 @@ def write_animation(animation_info):
     )
 
     if not animation_metadata_lsx_path.exists():
-        animation_metadata_template_tree = construct_animation_metadata_tree(
+        animation_metadata_tree = construct_animation_metadata_tree(
             animation_info,
             animation_guid,
         )
 
         # Save the modified tree to a temporary lsx file
         os.makedirs(get_resource_path() / "temp", exist_ok=True)
-        animation_metadata_template_tree.write(animation_metadata_lsx_path)
+        animation_metadata_tree.write(animation_metadata_lsx_path)
 
         # Convert the lsx file to lsf and save it to the appropriate path
         animation_metadata_lsf_path = construtct_animation_metadata_lsf_path(
