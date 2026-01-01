@@ -76,6 +76,69 @@ def get_character_visuals_paths() -> list[Path]:
             / "Gustav/Public/Gustav/Content"
             / "[PAK]_CharacterVisuals/_merged.lsf"
         ),
+        Path(
+            get_unpacked_data_path()
+            / "Shared/Public/Shared/Content"
+            / "[PAK]_CharacterVisuals/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Shared/Public/SharedDev/Content"
+            / "[PAK]_CharacterVisuals/_merged.lsf"
+        ),
+    ]
+
+
+def get_global_characters_paths() -> list[Path]:
+    return [
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/Gustav/Globals/TUT_Avernus_C/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/Gustav/Globals/WLD_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/BGO_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/CRE_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/CTY_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/END_Main/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/INT_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/IRN_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/SCL_Main_A/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path() / "Gustav/Mods/GustavDev/Globals/"
+            "SYS_Hirelings/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path() / "Gustav/Mods/GustavDev/Globals/"
+            "VoiceOfTheAbsolute/Characters/_merged.lsf"
+        ),
+        Path(
+            get_unpacked_data_path()
+            / "Gustav/Mods/GustavDev/Globals/WLD_Main_A/Characters/_merged.lsf"
+        ),
     ]
 
 

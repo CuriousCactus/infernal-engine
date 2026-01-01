@@ -8,6 +8,7 @@ from infernal_engine.utils.parsing import get_tree_from_lsf
 from infernal_engine.utils.settings import (
     get_base_body_path,
     get_character_visuals_paths,
+    get_global_characters_paths,
     get_resource_path,
 )
 
@@ -33,17 +34,101 @@ class BodyType(Enum):
     MS = "MaleStrong"
 
 
+def get_character_visual_resource_name_guid(character_guid: str) -> str | None:
+    # Get a guid which should probably be present in the visual resource name.
+    character_paths = get_global_characters_paths()
+    for character_path in character_paths:
+        mod = os.path.normpath(character_path).split(os.sep)[-5]
+        level = os.path.normpath(character_path).split(os.sep)[-3]
+
+        characters_tree = get_tree_from_lsf(
+            character_path,
+            get_resource_path()
+            / f"parsed/characters/global_characters_{mod}_{level}.lsx",
+        )
+
+        characters = (
+            characters_tree.find("region")  # type: ignore
+            .find("node")
+            .find("children")
+            .findall("node")
+        )
+
+        character_visual_resource_guid = next(
+            (
+                next(
+                    (
+                        attribute.get("value")
+                        for attribute in node.findall("attribute")
+                        if attribute.get("id") == "CharacterVisualResourceID"
+                    ),
+                    None,
+                )
+                for node in characters
+                if len(
+                    [
+                        x
+                        for x in (node.findall("attribute"))
+                        if x.get("value") == character_guid
+                    ]
+                )
+                > 0
+            ),
+            None,
+        )
+
+        if character_visual_resource_guid:
+            return character_visual_resource_guid
+        else:
+            template_guid = next(
+                (
+                    next(
+                        (
+                            attribute.get("value")
+                            for attribute in node.findall("attribute")
+                            if attribute.get("id") == "TemplateName"
+                        ),
+                        None,
+                    )
+                    for node in characters
+                    if len(
+                        [
+                            x
+                            for x in (node.findall("attribute"))
+                            if x.get("value") == character_guid
+                        ]
+                    )
+                    > 0
+                ),
+                None,
+            )
+
+            if template_guid:
+                return template_guid
+
+    return character_guid
+
+
 def get_character_base_visual_guid(character_guid: str) -> str | None:
+    character_visual_resource_name_guid = (
+        get_character_visual_resource_name_guid(character_guid)
+    )
+
     character_visuals_paths = get_character_visuals_paths()
     for character_visuals_path in character_visuals_paths:
         mod = os.path.normpath(character_visuals_path).split(os.sep)[-4]
         character_visuals_tree = get_tree_from_lsf(
             character_visuals_path,
-            get_resource_path() / "parsed" / f"character_visuals_{mod}.lsx",
+            get_resource_path()
+            / f"parsed/character_visuals/character_visuals_{mod}.lsx",
         )
 
         resources = (
-            character_visuals_tree.find("region")  # type: ignore
+            next(
+                x
+                for x in character_visuals_tree.findall("region")
+                if x.get("id") == "CharacterVisualBank"
+            )  # type: ignore
             .find("node")
             .find("children")
             .findall("node")
@@ -61,7 +146,7 @@ def get_character_base_visual_guid(character_guid: str) -> str | None:
                     [
                         x
                         for x in (node.findall("attribute"))
-                        if character_guid in x.get("value")
+                        if character_visual_resource_name_guid in x.get("value")
                     ]
                 )
                 > 0

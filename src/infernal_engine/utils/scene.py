@@ -41,6 +41,12 @@ def get_act(
             else:
                 act = dialog_file_path_sections[i].replace("Act", "Act0")
 
+    # Fallback: try to get act from dialog file name
+    if act is None:
+        for section in dialog_file.split("_"):
+            if "Act" in section:
+                act = section
+
     if act is None:
         raise ValueError("Act not found.")
 
