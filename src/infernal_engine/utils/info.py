@@ -7,7 +7,6 @@ from infernal_engine.utils.paths import (
 )
 from infernal_engine.utils.scene import get_scene_info
 from infernal_engine.utils.settings import get_dialog_binaries_paths
-from infernal_engine.utils.speakers import get_character_guid
 
 
 def get_animation_info(
@@ -23,32 +22,31 @@ def get_animation_info(
 
     # Retrieve and store character info if not already done
     if speaker_index not in speakers:
-        character_guid = get_character_guid(handle)
-
-        if character_guid is None:
-            return {}
-
-        character_info = get_character_info(character_guid)
+        character_info = get_character_info(handle)
 
         if character_info is None:
             return {}
 
         speakers[speaker_index] = character_info
 
-    scene_info = get_scene_info(
-        handle,
-        dialog_file,
-        dialog_file_path,
-        speakers[speaker_index],
-    )
+    # If the character has a mocap path, proceed to get scene info
+    if speakers[speaker_index].get("mocap_path") is not None:
+        scene_info = get_scene_info(
+            handle,
+            dialog_file,
+            dialog_file_path,
+            speakers[speaker_index],
+        )
 
-    animation_info = {
-        "handle": handle,
-        "speaker_index": speaker_index,
-        **speakers[speaker_index],
-        **scene_info,
-    }
+        animation_info = {
+            "handle": handle,
+            "speaker_index": speaker_index,
+            **speakers[speaker_index],
+            **scene_info,
+        }
 
-    print(animation_info)
+        print(animation_info)
 
-    return animation_info
+        return animation_info
+    else:
+        return {}

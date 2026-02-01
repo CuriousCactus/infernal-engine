@@ -8,7 +8,6 @@ from infernal_engine.utils.dialog import (
 from infernal_engine.utils.paths import (
     construct_animation_path,
     find_folder_path,
-    find_mocap_file_path,
 )
 from infernal_engine.utils.settings import get_unpacked_cinematic_anims_paths
 
@@ -59,8 +58,6 @@ def get_scene_info(
     dialog_file_path: Path,
     speaker: dict,
 ) -> dict:
-    mocap_path = find_mocap_file_path(handle)
-
     if speaker.get("base_visual") is None:
         return {}
 
@@ -80,7 +77,7 @@ def get_scene_info(
         "action": dialog_line_squashed,
         "dialog_line": dialog_line,
         "dialog_line_squashed": dialog_line_squashed,
-        "mocap_path": mocap_path,
+        "mocap_path": speaker["mocap_path"],
     }
 
     scene_info["animation_path"] = construct_animation_path(scene_info, speaker)

@@ -34,7 +34,7 @@ def find_file_path(file_name, paths) -> Path:
     return file_path
 
 
-def find_mocap_file_path(handle) -> Path | None:
+def find_mocap_path(handle) -> Path | None:
     for file in get_mocaps_path().glob("*.gr2"):
         if handle in file.name:
             return file

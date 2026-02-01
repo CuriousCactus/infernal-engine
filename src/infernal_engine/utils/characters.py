@@ -5,12 +5,14 @@ from logging import warning
 from pathlib import Path
 
 from infernal_engine.utils.parsing import get_tree_from_lsf
+from infernal_engine.utils.paths import find_mocap_path
 from infernal_engine.utils.settings import (
     get_base_body_path,
     get_character_visuals_paths,
     get_global_characters_paths,
     get_resource_path,
 )
+from infernal_engine.utils.speakers import get_character_guid
 
 
 class Race(Enum):
@@ -297,11 +299,24 @@ def get_skeleton_guid(
 
 
 def get_character_info(
-    character_guid: str,
+    handle: str,
 ) -> dict | None:
-    character_info: dict[str, str | None] = {}
+    character_info: dict[str, str | Path | None] = {}
+
+    # Get mocap file path
+    mocap_path = find_mocap_path(handle)
+
+    # If no mocap file path found, give up (happens for Tav)
+    if mocap_path is None:
+        return {}
+
+    character_info["mocap_path"] = mocap_path
+
+    # Get character guid
+    character_guid = get_character_guid(mocap_path)
     character_info["character_guid"] = character_guid
 
+    # Get character base visual guid
     character_base_visual_guid = get_character_base_visual_guid(character_guid)
 
     if character_base_visual_guid is None:
@@ -314,6 +329,7 @@ def get_character_info(
 
     character_info["character_base_visual_guid"] = character_base_visual_guid
 
+    # Search body files for character base visual name
     body_paths = glob.glob(
         str(get_base_body_path()) + "/*/[[]PAK[]]*Body/_merged.lsf",
         recursive=True,
@@ -342,6 +358,7 @@ def get_character_info(
     if base_visual is None:
         return character_info
 
+    # From the base visual name, get info about the body type
     base_visual_sections = base_visual.split("_")
     race = base_visual_sections[0]
     body_type = base_visual_sections[1]
