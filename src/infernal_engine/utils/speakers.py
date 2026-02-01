@@ -1,28 +1,24 @@
-def get_character_guid(tree, speaker_index) -> str | None:
-    nodes = tree.find("region").find("node").find("children").findall("node")
+from infernal_engine.utils.paths import find_mocap_file_path
 
-    speakers_list = (
-        next(node for node in nodes if node.get("id") == "speakerlist")
-        .find("children")
-        .findall("node")
-    )
 
-    character_guid = next(
-        (
-            next(
-                attribute.get("value")
-                for attribute in speaker.findall("attribute")
-                if attribute.get("id") == "list"
-            )
-            for speaker in speakers_list
-            if next(
-                attribute.get("value")
-                for attribute in speaker.findall("attribute")
-                if attribute.get("id") == "index"
-            )
-            == speaker_index
-        ),
-        None,
-    )
+def get_character_guid(handle: str) -> str | None:
+    mocap_file_path = find_mocap_file_path(handle)
 
-    return character_guid
+    if mocap_file_path:
+        character_guid_no_dashes = mocap_file_path.name.split("_")[1][1:]
+
+        character_guid = (
+            character_guid_no_dashes[:8]
+            + "-"
+            + character_guid_no_dashes[8:12]
+            + "-"
+            + character_guid_no_dashes[12:16]
+            + "-"
+            + character_guid_no_dashes[16:20]
+            + "-"
+            + character_guid_no_dashes[20:]
+        )
+
+        return character_guid
+    else:
+        return None

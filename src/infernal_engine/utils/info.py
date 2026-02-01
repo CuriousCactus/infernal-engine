@@ -1,5 +1,3 @@
-from logging import warning
-
 from infernal_engine.utils.characters import get_character_info
 from infernal_engine.utils.dialog import get_speaker_index
 from infernal_engine.utils.parsing import get_tree_from_lsf
@@ -23,18 +21,11 @@ def get_animation_info(
 
     speaker_index = get_speaker_index(dialog_tree, handle)
 
+    # Retrieve and store character info if not already done
     if speaker_index not in speakers:
-        character_guid = get_character_guid(
-            dialog_tree,
-            speaker_index,
-        )
+        character_guid = get_character_guid(handle)
 
         if character_guid is None:
-            warning(
-                "character_guid not found for "
-                f"character with speaker_index {speaker_index}"
-            )
-
             return {}
 
         character_info = get_character_info(character_guid)
@@ -43,8 +34,6 @@ def get_animation_info(
             return {}
 
         speakers[speaker_index] = character_info
-    else:
-        character_guid = speakers[speaker_index]["character_guid"]
 
     scene_info = get_scene_info(
         handle,

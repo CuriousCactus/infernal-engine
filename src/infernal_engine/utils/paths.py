@@ -34,22 +34,20 @@ def find_file_path(file_name, paths) -> Path:
     return file_path
 
 
+def find_mocap_file_path(handle) -> Path | None:
+    for file in get_mocaps_path().glob("*.gr2"):
+        if handle in file.name:
+            return file
+
+    return None
+
+
 def construct_parsed_dialog_file_path(dialog_file: str) -> Path:
     parsed_dialog_file_path = (
         get_resource_path() / "parsed" / "dialogs" / f"{dialog_file}.lsx"
     )
 
     return parsed_dialog_file_path
-
-
-def construct_mocap_path(speaker, handle) -> Path:
-    return Path(
-        get_mocaps_path() / "MC_v"
-        f"{speaker['character_guid'].replace('-', '')}"
-        "_"
-        f"{handle}"
-        ".GR2"
-    )
 
 
 def construct_animation_path(

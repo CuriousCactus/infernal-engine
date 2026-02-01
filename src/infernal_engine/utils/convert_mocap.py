@@ -13,11 +13,14 @@ def convert_mocap(
     prog_var=None,
     root=None,
 ):
+    # Get all handles for all lines in the dialog file if no
+    # specific one is passed
     if not handle:
         handles = get_handles(dialog_file)
     else:
         handles = [handle]
 
+    # Store speaker info to avoid redundant lookups
     speakers: dict[str, dict[str, str | Path]] = {}
     for index, handle in enumerate(handles):
         animation_info = get_animation_info(
@@ -58,3 +61,4 @@ if __name__ == "__main__":
         "hfd3d4e05gf322g4231ga27dga265b4fdc449",
         "WYR_GortashConfrontation_SoulConsumption",
     )
+    convert_mocap("h00b3ac7dge537g488bg90b1g374567417c8b", "SHA_Raphael")

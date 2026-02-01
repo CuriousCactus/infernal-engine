@@ -36,6 +36,7 @@ class BodyType(Enum):
 
 def get_character_visual_resource_name_guid(character_guid: str) -> str | None:
     # Get a guid which should probably be present in the visual resource name.
+    # Search global characters for it.
     character_paths = get_global_characters_paths()
     for character_path in character_paths:
         mod = os.path.normpath(character_path).split(os.sep)[-5]
@@ -106,6 +107,8 @@ def get_character_visual_resource_name_guid(character_guid: str) -> str | None:
             if template_guid:
                 return template_guid
 
+    # Fall back to returning character_guid if nothing found
+    # - may still work for local characters
     return character_guid
 
 
@@ -117,6 +120,7 @@ def get_character_base_visual_guid(character_guid: str) -> str | None:
     character_visuals_paths = get_character_visuals_paths()
     for character_visuals_path in character_visuals_paths:
         mod = os.path.normpath(character_visuals_path).split(os.sep)[-4]
+
         character_visuals_tree = get_tree_from_lsf(
             character_visuals_path,
             get_resource_path()
@@ -301,6 +305,11 @@ def get_character_info(
     character_base_visual_guid = get_character_base_visual_guid(character_guid)
 
     if character_base_visual_guid is None:
+        warning(
+            "character_base_visual_guid not found for "
+            f"character with character_guid {character_guid}"
+        )
+
         return character_info
 
     character_info["character_base_visual_guid"] = character_base_visual_guid
